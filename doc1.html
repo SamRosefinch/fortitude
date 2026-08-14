@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Calisthenics Documentation: Collection Log & Achievements</title>
 
@@ -12,260 +15,384 @@
     >
 
     <link rel="stylesheet" href="styles.css">
-
-    <!-- Markdown parser -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
 <body>
 
-    <!-- SIDEBAR NAVIGATION -->
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
     <nav class="sidebar">
+
         <div class="sidebar-brand">
+
             <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
             </svg>
+
             Collection Log
+
         </div>
+
 
         <ul class="sidebar-menu" id="sidebar-menu">
 
             <li>
-                <a class="nav-link active" data-page="0">
+                <a class="nav-link active" onclick="goToPage(0)">
                     Overview
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="1">
+                <a class="nav-link" onclick="goToPage(1)">
                     Push-Up Matrix
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="2">
+                <a class="nav-link" onclick="goToPage(2)">
                     Squat Matrix
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="3">
+                <a class="nav-link" onclick="goToPage(3)">
                     Posterior Chain Matrix
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="4">
+                <a class="nav-link" onclick="goToPage(4)">
                     Vertical Pull Matrix
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="5">
+                <a class="nav-link" onclick="goToPage(5)">
                     Core Stability Matrix
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="6">
+                <a class="nav-link" onclick="goToPage(6)">
                     Execution Parameters
                 </a>
             </li>
 
-            <!-- Dynamically populated -->
-            <li class="nav-section">
-                <span>Milestones</span>
-            </li>
-
             <li>
-                <a class="nav-link" data-page="7">
-                    Part I
+                <a class="nav-link" onclick="goToPage(7)">
+                    Milestones (Part I)
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="8">
-                    Part II
+                <a class="nav-link" onclick="goToPage(8)">
+                    Milestones (Part II)
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="9">
-                    Part III
+                <a class="nav-link" onclick="goToPage(9)">
+                    Milestones (Part III)
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="10">
-                    Part IV
+                <a class="nav-link" onclick="goToPage(10)">
+                    Milestones (Part IV)
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="11">
-                    Part V
-                </a>
-            </li>
-
-            <li class="nav-section">
-                <span>Challenges</span>
-            </li>
-
-            <li>
-                <a class="nav-link" data-page="12">
-                    Easy
+                <a class="nav-link" onclick="goToPage(11)">
+                    Milestones (Part V)
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="13">
-                    Medium
+                <a class="nav-link" onclick="goToPage(12)">
+                    Easy Challenges
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="14">
-                    Hard
+                <a class="nav-link" onclick="goToPage(13)">
+                    Medium Challenges
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="15">
-                    Elite
+                <a class="nav-link" onclick="goToPage(14)">
+                    Hard Challenges
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="16">
-                    Master
+                <a class="nav-link" onclick="goToPage(15)">
+                    Elite Challenges
                 </a>
             </li>
 
             <li>
-                <a class="nav-link" data-page="17">
-                    Grandmaster
+                <a class="nav-link" onclick="goToPage(16)">
+                    Master Challenges
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link" onclick="goToPage(17)">
+                    Grandmaster Challenges
                 </a>
             </li>
 
         </ul>
+
+
+        <div class="sidebar-footer">
+
+            <button
+                class="reset-button"
+                onclick="clearAllProgress()"
+            >
+                Reset Progress
+            </button>
+
+        </div>
+
     </nav>
 
 
-    <!-- MAIN DOCUMENTATION CONTAINER -->
+    <!-- =====================================================
+         MAIN DOCUMENTATION AREA
+         ===================================================== -->
+
     <main class="content">
 
-        <div class="slider-container" id="sliderContainer">
+        <div
+            class="slider-container"
+            id="sliderContainer"
+        >
+
 
             <!-- PAGE 0: OVERVIEW -->
             <div class="print-page active" data-index="0">
 
                 <div class="page-main-content">
 
-                    <h1>Calisthenics Quick Reference Guide</h1>
+                    <h1>Calisthenics Collection Log</h1>
 
-                    <p>
-                        Target: Beginner progression focusing on structural movement
-                        mastery, milestone completion, and tiered difficulty challenges.
+                    <p class="overview-intro">
+                        Track your progression through foundational milestones and
+                        progressively harder calisthenics challenges.
                     </p>
 
+                    <!-- OVERALL PROGRESS -->
+                    <div class="overview-progress">
+
+                        <div class="overview-stat">
+                            <div class="overview-stat-value" id="overall-progress">
+                                0%
+                            </div>
+                            <div class="overview-stat-label">
+                                Overall Completion
+                            </div>
+                        </div>
+
+                        <div class="overview-stat">
+                            <div class="overview-stat-value" id="milestone-progress">
+                                0%
+                            </div>
+                            <div class="overview-stat-label">
+                                Milestones
+                            </div>
+                        </div>
+
+                        <div class="overview-stat">
+                            <div class="overview-stat-value" id="challenge-progress">
+                                0%
+                            </div>
+                            <div class="overview-stat-label">
+                                Challenges
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- OVERALL PROGRESS BAR -->
+                    <div class="overview-section">
+
+                        <div class="overview-section-header">
+                            <h3>Collection Progress</h3>
+
+                            <span id="progress-count">
+                                0 / 0 Completed
+                            </span>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div
+                                class="progress-bar-fill"
+                                id="overall-progress-bar"
+                                style="width: 0%;">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- MILESTONES -->
+                    <div class="overview-section">
+
+                        <div class="overview-section-header">
+                            <h3>Milestones</h3>
+
+                            <button
+                                class="overview-link"
+                                onclick="goToPage(7)">
+                                View Milestones →
+                            </button>
+                        </div>
+
+                        <div class="overview-category">
+
+                            <div class="category-content">
+
+                                <div class="category-title">
+                                    Milestones & Benchmarks
+                                </div>
+
+                                <div
+                                    class="category-description"
+                                    id="milestone-summary">
+                                    No milestones completed yet.
+                                </div>
+
+                                <div class="progress-bar small">
+                                    <div
+                                        class="progress-bar-fill"
+                                        id="milestone-progress-bar"
+                                        style="width: 0%;">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CHALLENGES -->
+                    <div class="overview-section">
+
+                        <div class="overview-section-header">
+                            <h3>Challenges</h3>
+
+                            <button
+                                class="overview-link"
+                                onclick="goToPage(12)">
+                                View Challenges →
+                            </button>
+                        </div>
+
+
+                        <div class="challenge-tier-overview">
+
+                            <div class="tier-overview">
+                                <span class="challenge-badge badge-easy">
+                                    Easy
+                                </span>
+
+                                <span id="easy-progress">
+                                    0 / 0
+                                </span>
+                            </div>
+
+
+                            <div class="tier-overview">
+                                <span class="challenge-badge badge-medium">
+                                    Medium
+                                </span>
+
+                                <span id="medium-progress">
+                                    0 / 0
+                                </span>
+                            </div>
+
+
+                            <div class="tier-overview">
+                                <span class="challenge-badge badge-hard">
+                                    Hard
+                                </span>
+
+                                <span id="hard-progress">
+                                    0 / 0
+                                </span>
+                            </div>
+
+
+                            <div class="tier-overview">
+                                <span class="challenge-badge badge-elite">
+                                    Elite
+                                </span>
+
+                                <span id="elite-progress">
+                                    0 / 0
+                                </span>
+                            </div>
+
+
+                            <div class="tier-overview">
+                                <span class="challenge-badge badge-master">
+                                    Master
+                                </span>
+
+                                <span id="master-progress">
+                                    0 / 0
+                                </span>
+                            </div>
+
+
+                            <div class="tier-overview">
+                                <span class="challenge-badge badge-grandmaster">
+                                    Grandmaster
+                                </span>
+
+                                <span id="grandmaster-progress">
+                                    0 / 0
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- GOAL CALLOUT -->
                     <div class="callout">
+
                         <p>
                             <strong>Goal Objective:</strong>
                             Build lean muscle mass, systemic strength capacity,
                             achieve structured milestones, and conquer graded
                             challenges ranging from Easy to Grandmaster.
                         </p>
-                    </div>
-
-                </div>
-
-                <div class="technical-panel">
-                    <h4>System Architecture</h4>
-
-                    <p>
-                        This reference framework relies on biomechanical loading
-                        gradients to progressively build joint resilience and
-                        structural muscle adaptation.
-                    </p>
-                </div>
-
-            </div>
-
-
-            <!-- PAGE 1: PUSH-UP -->
-            <div class="print-page" data-index="1">
-
-                <div class="page-main-content">
-
-                    <h2>Push-Up Progression Matrix</h2>
-
-                    <div class="progression-grid">
-
-                        <div class="progression-card">
-                            <span class="tier-badge">Tier 1</span>
-
-                            <div class="progression-title">
-                                Incline Push-Up
-                            </div>
-
-                            <div class="progression-target">
-                                3 × 10–12 Reps
-                            </div>
-
-                            <p>
-                                Place hands on an elevated stable surface,
-                                maintaining a straight body line.
-                            </p>
-                        </div>
-
-
-                        <div class="progression-card">
-                            <span class="tier-badge">Tier 2</span>
-
-                            <div class="progression-title">
-                                Knee Push-Up
-                            </div>
-
-                            <div class="progression-target">
-                                3 × 8–10 Reps
-                            </div>
-
-                            <p>
-                                Kneeling plank position with rigid core tension
-                                while pressing torso.
-                            </p>
-                        </div>
-
-
-                        <div class="progression-card">
-                            <span class="tier-badge">Tier 3</span>
-
-                            <div class="progression-title">
-                                Full Push-Up
-                            </div>
-
-                            <div class="progression-target">
-                                3 × Max Reps
-                            </div>
-
-                            <p>
-                                Full rigid plank execution with elbows at a
-                                90-degree angle or lower.
-                            </p>
-                        </div>
 
                     </div>
 
                 </div>
 
+
+                <!-- TECHNICAL PANEL -->
                 <div class="technical-panel">
 
-                    <h4>Technical Analysis</h4>
+                    <h4>Collection Status</h4>
 
-                    <p>
-                        Graduated loading vectors systematically scale load
-                        from incline to standard body weight, ensuring safe
-                        structural adaptation.
+                    <p id="collection-status">
+                        Begin completing milestones and challenges to track
+                        your progress.
                     </p>
 
                 </div>
@@ -273,80 +400,116 @@
             </div>
 
 
-            <!-- PAGE 2: SQUAT -->
-            <div class="print-page" data-index="2">
+            <!-- =================================================
+                 PAGE 1
+                 ================================================= -->
+
+            <div
+                class="print-page"
+                data-index="1"
+            >
 
                 <div class="page-main-content">
 
-                    <h2>Squat Progression Matrix</h2>
+                    <h2>
+                        Push-Up Progression Matrix
+                    </h2>
 
                     <div class="progression-grid">
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 1</span>
 
-                            <div class="progression-title">
-                                Box / Chair Squat
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 1
+                                </span>
+
+                                <div class="progression-title">
+                                    Incline Push-Up
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 10–12 Reps
+                                </div>
+
+                                <p>
+                                    Place hands on an elevated stable
+                                    surface, maintaining a straight
+                                    body line.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 12–15 Reps
-                            </div>
-
-                            <p>
-                                Lower hips back and down until seated briefly
-                                on a chair, then stand up.
-                            </p>
                         </div>
 
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 2</span>
 
-                            <div class="progression-title">
-                                Bodyweight Squat
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 2
+                                </span>
+
+                                <div class="progression-title">
+                                    Knee Push-Up
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 8–10 Reps
+                                </div>
+
+                                <p>
+                                    Kneeling plank position with rigid
+                                    core tension while pressing torso.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 12–15 Reps
-                            </div>
-
-                            <p>
-                                Full depth unassisted squat with heels flat
-                                and torso upright.
-                            </p>
                         </div>
 
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 3</span>
 
-                            <div class="progression-title">
-                                Paused Squat
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 3
+                                </span>
+
+                                <div class="progression-title">
+                                    Full Push-Up
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × Max Reps
+                                </div>
+
+                                <p>
+                                    Full rigid plank execution with
+                                    elbows at a 90-degree angle or lower.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 8–10 Reps
-                            </div>
-
-                            <p>
-                                Hold a 2-second pause at the bottom deep
-                                position before driving upward.
-                            </p>
                         </div>
 
                     </div>
 
                 </div>
 
+
                 <div class="technical-panel">
 
-                    <h4>Technical Analysis</h4>
+                    <h4>
+                        Technical Analysis
+                    </h4>
 
                     <p>
-                        Develops lower limb power and composition across
-                        quadriceps and glutes while maintaining vertical
-                        shin alignment.
+                        Graduated loading vectors systematically scale
+                        load from incline to standard body weight,
+                        ensuring safe structural adaptation.
                     </p>
 
                 </div>
@@ -354,79 +517,116 @@
             </div>
 
 
-            <!-- PAGE 3: POSTERIOR CHAIN -->
-            <div class="print-page" data-index="3">
+            <!-- =================================================
+                 PAGE 2
+                 ================================================= -->
+
+            <div
+                class="print-page"
+                data-index="2"
+            >
 
                 <div class="page-main-content">
 
-                    <h2>Posterior Chain Progression Matrix</h2>
+                    <h2>
+                        Squat Progression Matrix
+                    </h2>
 
                     <div class="progression-grid">
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 1</span>
 
-                            <div class="progression-title">
-                                Short-Lever Bridge
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 1
+                                </span>
+
+                                <div class="progression-title">
+                                    Box / Chair Squat
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 12–15 Reps
+                                </div>
+
+                                <p>
+                                    Lower hips back and down until
+                                    seated briefly on a chair, then
+                                    stand up.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 15 Reps
-                            </div>
-
-                            <p>
-                                Lie on back with knees bent, feet close to hips.
-                                Drive through heels.
-                            </p>
                         </div>
 
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 2</span>
 
-                            <div class="progression-title">
-                                Standard Glute Bridge
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 2
+                                </span>
+
+                                <div class="progression-title">
+                                    Bodyweight Squat
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 12–15 Reps
+                                </div>
+
+                                <p>
+                                    Full depth unassisted squat with
+                                    heels flat and torso upright.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 12–15 Reps
-                            </div>
-
-                            <p>
-                                Feet extended further out to target glutes
-                                and hamstring recruitment.
-                            </p>
                         </div>
 
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 3</span>
 
-                            <div class="progression-title">
-                                Single-Leg Bridge
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 3
+                                </span>
+
+                                <div class="progression-title">
+                                    Paused Squat
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 8–10 Reps
+                                </div>
+
+                                <p>
+                                    Hold a 2-second pause at the bottom
+                                    deep position before driving upward.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 8–10 Reps / Leg
-                            </div>
-
-                            <p>
-                                Lift one leg off the floor and drive entirely
-                                through the planted heel.
-                            </p>
                         </div>
 
                     </div>
 
                 </div>
 
+
                 <div class="technical-panel">
 
-                    <h4>Technical Analysis</h4>
+                    <h4>
+                        Technical Analysis
+                    </h4>
 
                     <p>
-                        Reinforces pelvic stability and posterior chain
-                        activation to counter anterior dominance.
+                        Develops lower limb power and composition
+                        across quadriceps and glutes while maintaining
+                        vertical shin alignment.
                     </p>
 
                 </div>
@@ -434,79 +634,114 @@
             </div>
 
 
-            <!-- PAGE 4: VERTICAL PULL -->
-            <div class="print-page" data-index="4">
+            <!-- =================================================
+                 PAGE 3
+                 ================================================= -->
+
+            <div
+                class="print-page"
+                data-index="3"
+            >
 
                 <div class="page-main-content">
 
-                    <h2>Vertical Pull Progression Matrix</h2>
+                    <h2>
+                        Posterior Chain Progression Matrix
+                    </h2>
 
                     <div class="progression-grid">
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 1</span>
 
-                            <div class="progression-title">
-                                Active Dead Hang
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 1
+                                </span>
+
+                                <div class="progression-title">
+                                    Short-Lever Bridge
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 15 Reps
+                                </div>
+
+                                <p>
+                                    Lie on back with knees bent, feet
+                                    close to hips. Drive through heels.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 20–30s Hold
-                            </div>
-
-                            <p>
-                                Hang from a bar with shoulders engaged and
-                                scapulae depressed.
-                            </p>
                         </div>
 
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 2</span>
 
-                            <div class="progression-title">
-                                Australian Row
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 2
+                                </span>
+
+                                <div class="progression-title">
+                                    Standard Glute Bridge
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 12–15 Reps
+                                </div>
+
+                                <p>
+                                    Feet extended further out to target
+                                    glutes and hamstring recruitment.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 8–10 Reps
-                            </div>
-
-                            <p>
-                                Pull chest to a low bar or table edge while
-                                maintaining a rigid body line.
-                            </p>
                         </div>
 
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 3</span>
 
-                            <div class="progression-title">
-                                Negative Pull-Up
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 3
+                                </span>
+
+                                <div class="progression-title">
+                                    Single-Leg Bridge
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 8–10 Reps / Leg
+                                </div>
+
+                                <p>
+                                    Lift one leg off the floor and drive
+                                    entirely through the planted heel.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 3–5 Reps
-                            </div>
-
-                            <p>
-                                Jump to top position and lower yourself down
-                                on a 5-second count.
-                            </p>
                         </div>
 
                     </div>
 
                 </div>
 
+
                 <div class="technical-panel">
 
-                    <h4>Technical Analysis</h4>
+                    <h4>
+                        Technical Analysis
+                    </h4>
 
                     <p>
-                        Builds essential back thickness and scapular control,
-                        balancing the structural pull requirements.
+                        Reinforces pelvic stability and posterior
+                        chain activation to counter anterior dominance.
                     </p>
 
                 </div>
@@ -514,75 +749,225 @@
             </div>
 
 
-            <!-- PAGE 5: CORE -->
-            <div class="print-page" data-index="5">
+            <!-- =================================================
+                 PAGE 4
+                 ================================================= -->
+
+            <div
+                class="print-page"
+                data-index="4"
+            >
 
                 <div class="page-main-content">
 
-                    <h2>Core Stability Progression Matrix</h2>
+                    <h2>
+                        Vertical Pull Progression Matrix
+                    </h2>
 
                     <div class="progression-grid">
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 1</span>
 
-                            <div class="progression-title">
-                                Kneeling Plank
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 1
+                                </span>
+
+                                <div class="progression-title">
+                                    Active Dead Hang
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 20–30s Hold
+                                </div>
+
+                                <p>
+                                    Hang from a bar with shoulders engaged
+                                    and scapulae depressed.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 30s Hold
-                            </div>
-
-                            <p>
-                                Maintain a straight line from knees to shoulders
-                                with braced abs.
-                            </p>
                         </div>
 
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 2</span>
 
-                            <div class="progression-title">
-                                Standard Plank
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 2
+                                </span>
+
+                                <div class="progression-title">
+                                    Australian Row
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 8–10 Reps
+                                </div>
+
+                                <p>
+                                    Pull chest to a low bar or table edge
+                                    while maintaining a rigid body line.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 30–45s Hold
-                            </div>
-
-                            <p>
-                                Full forearm plank with zero spinal sag or
-                                lumbar hyperextension.
-                            </p>
                         </div>
 
 
                         <div class="progression-card">
-                            <span class="tier-badge">Tier 3</span>
 
-                            <div class="progression-title">
-                                Long-Lever Plank
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 3
+                                </span>
+
+                                <div class="progression-title">
+                                    Negative Pull-Up
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 3–5 Reps
+                                </div>
+
+                                <p>
+                                    Jump to top position and lower
+                                    yourself down on a 5-second count.
+                                </p>
+
                             </div>
 
-                            <div class="progression-target">
-                                3 × 20–30s Hold
-                            </div>
-
-                            <p>
-                                Elbows shifted forward past shoulders to
-                                dramatically increase load.
-                            </p>
                         </div>
 
                     </div>
 
                 </div>
 
+
                 <div class="technical-panel">
 
-                    <h4>Technical Analysis</h4>
+                    <h4>
+                        Technical Analysis
+                    </h4>
+
+                    <p>
+                        Builds essential back thickness and scapular
+                        control, balancing the structural pull requirements.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PAGE 5
+                 ================================================= -->
+
+            <div
+                class="print-page"
+                data-index="5"
+            >
+
+                <div class="page-main-content">
+
+                    <h2>
+                        Core Stability Progression Matrix
+                    </h2>
+
+                    <div class="progression-grid">
+
+                        <div class="progression-card">
+
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 1
+                                </span>
+
+                                <div class="progression-title">
+                                    Kneeling Plank
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 30s Hold
+                                </div>
+
+                                <p>
+                                    Maintain a straight line from knees
+                                    to shoulders with braced abs.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="progression-card">
+
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 2
+                                </span>
+
+                                <div class="progression-title">
+                                    Standard Plank
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 30–45s Hold
+                                </div>
+
+                                <p>
+                                    Full forearm plank with zero spinal
+                                    sag or lumbar hyperextension.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="progression-card">
+
+                            <div>
+
+                                <span class="tier-badge">
+                                    Tier 3
+                                </span>
+
+                                <div class="progression-title">
+                                    Long-Lever Plank
+                                </div>
+
+                                <div class="progression-target">
+                                    3 × 20–30s Hold
+                                </div>
+
+                                <p>
+                                    Elbows shifted forward past shoulders
+                                    to dramatically increase load.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="technical-panel">
+
+                    <h4>
+                        Technical Analysis
+                    </h4>
 
                     <p>
                         Trains anti-extension endurance of the transverse
@@ -595,44 +980,56 @@
             </div>
 
 
-            <!-- PAGE 6: PARAMETERS -->
-            <div class="print-page" data-index="6">
+            <!-- =================================================
+                 PAGE 6
+                 ================================================= -->
+
+            <div
+                class="print-page"
+                data-index="6"
+            >
 
                 <div class="page-main-content">
 
-                    <h2>Execution Parameters</h2>
+                    <h2>
+                        Execution Parameters
+                    </h2>
 
                     <ul class="parameter-list">
 
                         <li>
                             <strong>Frequency:</strong>
-                            Perform routines 3 times per week with 48 hours
-                            recovery between sessions.
+                            Perform routines 3 times per week with
+                            48 hours recovery between sessions.
                         </li>
 
                         <li>
                             <strong>Time Under Tension:</strong>
-                            Execute a 2-second eccentric phase (lowering)
-                            followed by a strong concentric phase.
+                            Execute a 2-second eccentric phase
+                            (lowering) followed by a strong
+                            concentric phase.
                         </li>
 
                         <li>
                             <strong>Progressive Overload:</strong>
-                            Advance tiers only when clean execution of current
-                            tier rep ranges is mastered.
+                            Advance tiers only when clean execution
+                            of current tier rep ranges is mastered.
                         </li>
 
                     </ul>
 
                 </div>
 
+
                 <div class="technical-panel">
 
-                    <h4>Physiological Recovery</h4>
+                    <h4>
+                        Physiological Recovery
+                    </h4>
 
                     <p>
-                        Protein synthesis windows and neuromuscular adaptations
-                        peak during recovery blocks.
+                        Recovery allows neuromuscular adaptations and
+                        tissue remodeling to occur between training blocks.
                     </p>
 
                 </div>
@@ -640,140 +1037,115 @@
             </div>
 
 
-            <!-- DYNAMIC MARKDOWN PAGES -->
+            <!-- =================================================
+                 MARKDOWN PAGES
+                 ================================================= -->
 
             <div
                 class="print-page markdown-page"
                 data-index="7"
-                data-markdown="content/milestones/part-1.md">
-                <div class="markdown-loading">
-                    Loading milestones...
-                </div>
-            </div>
+                data-content="content/milestones/part-1.md"
+            ></div>
 
 
             <div
                 class="print-page markdown-page"
                 data-index="8"
-                data-markdown="content/milestones/part-2.md">
-                <div class="markdown-loading">
-                    Loading milestones...
-                </div>
-            </div>
+                data-content="content/milestones/part-2.md"
+            ></div>
 
 
             <div
                 class="print-page markdown-page"
                 data-index="9"
-                data-markdown="content/milestones/part-3.md">
-                <div class="markdown-loading">
-                    Loading milestones...
-                </div>
-            </div>
+                data-content="content/milestones/part-3.md"
+            ></div>
 
 
             <div
                 class="print-page markdown-page"
                 data-index="10"
-                data-markdown="content/milestones/part-4.md">
-                <div class="markdown-loading">
-                    Loading milestones...
-                </div>
-            </div>
+                data-content="content/milestones/part-4.md"
+            ></div>
 
 
             <div
                 class="print-page markdown-page"
                 data-index="11"
-                data-markdown="content/milestones/part-5.md">
-                <div class="markdown-loading">
-                    Loading milestones...
-                </div>
-            </div>
+                data-content="content/milestones/part-5.md"
+            ></div>
 
 
             <div
                 class="print-page markdown-page"
                 data-index="12"
-                data-markdown="content/challenges/easy.md">
-                <div class="markdown-loading">
-                    Loading challenges...
-                </div>
-            </div>
+                data-content="content/challenges/easy.md"
+            ></div>
 
 
             <div
                 class="print-page markdown-page"
                 data-index="13"
-                data-markdown="content/challenges/medium.md">
-                <div class="markdown-loading">
-                    Loading challenges...
-                </div>
-            </div>
+                data-content="content/challenges/medium.md"
+            ></div>
 
 
             <div
                 class="print-page markdown-page"
                 data-index="14"
-                data-markdown="content/challenges/hard.md">
-                <div class="markdown-loading">
-                    Loading challenges...
-                </div>
-            </div>
+                data-content="content/challenges/hard.md"
+            ></div>
 
 
             <div
                 class="print-page markdown-page"
                 data-index="15"
-                data-markdown="content/challenges/elite.md">
-                <div class="markdown-loading">
-                    Loading challenges...
-                </div>
-            </div>
+                data-content="content/challenges/elite.md"
+            ></div>
 
 
             <div
                 class="print-page markdown-page"
                 data-index="16"
-                data-markdown="content/challenges/master.md">
-                <div class="markdown-loading">
-                    Loading challenges...
-                </div>
-            </div>
+                data-content="content/challenges/master.md"
+            ></div>
 
 
             <div
                 class="print-page markdown-page"
                 data-index="17"
-                data-markdown="content/challenges/grandmaster.md">
-                <div class="markdown-loading">
-                    Loading challenges...
-                </div>
-            </div>
+                data-content="content/challenges/grandmaster.md"
+            ></div>
 
         </div>
 
 
-        <!-- SLIDER CONTROLS -->
+        <!-- =====================================================
+             FOOTER CONTROLS
+             ===================================================== -->
+
         <div class="slider-controls">
 
             <button
                 class="btn"
                 id="prevBtn"
-                type="button">
+                onclick="prevPage()"
+            >
                 Previous
             </button>
 
             <div
                 class="page-indicator"
-                id="pageIndicator">
+                id="pageIndicator"
+            >
                 Page 1 of 18
             </div>
 
             <button
                 class="btn btn-primary"
                 id="nextBtn"
-                type="button">
+                onclick="nextPage()"
+            >
                 Next
             </button>
 
@@ -781,6 +1153,16 @@
 
     </main>
 
+
+    <!-- =====================================================
+         MARKED.JS
+         ===================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+    ></script>
+
+    <!-- APPLICATION SCRIPT -->
 
     <script src="scripts.js"></script>
 
