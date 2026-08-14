@@ -2,29 +2,32 @@
 
 Introductory tasks designed to test consistency and basic movement capacity.
 
-## The Awakening Routine
+<div class="challenge-card">
+  <input type="checkbox">
+  <div>
+    <span class="challenge-badge badge-easy">Easy</span>
+    <div class="progression-title">The Awakening Routine</div>
+    <p>Complete 3 full workout sessions in a single calendar week.</p>
+  </div>
+</div>
 
-**Difficulty:** Easy
+<div class="challenge-card">
+  <input type="checkbox">
+  <div>
+    <span class="challenge-badge badge-easy">Easy</span>
+    <div class="progression-title">Century Squat</div>
+    <p>Accumulate 100 total Bodyweight Squats over the course of one day.</p>
+  </div>
+</div>
 
-Complete 3 full workout sessions in a single calendar week.
-
-- [ ] Completed
-
-## Century Squat
-
-**Difficulty:** Easy
-
-Accumulate 100 total Bodyweight Squats over the course of one day.
-
-- [ ] Completed
-
-## Plank Novice
-
-**Difficulty:** Easy
-
-Hold a cumulative total of 3 minutes in a Standard Plank across one session.
-
-- [ ] Completed
+<div class="challenge-card">
+  <input type="checkbox">
+  <div>
+    <span class="challenge-badge badge-easy">Easy</span>
+    <div class="progression-title">Plank Novice</div>
+    <p>Hold a cumulative total of 3 minutes in a Standard Plank across one session.</p>
+  </div>
+</div>
 
 ## Challenge Protocol
 
