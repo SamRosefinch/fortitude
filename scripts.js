@@ -7,6 +7,15 @@ const totalPages = 18;
 const STORAGE_PREFIX = 'calisthenics-progress-';
 const PAGE_STORAGE_KEY = 'calisthenics-current-page';
 
+/* Explicit marked configuration so GFM task-list behavior can't
+   silently change with a CDN "latest" update. */
+if (typeof marked !== 'undefined') {
+    marked.setOptions({
+        gfm: true,
+        breaks: false
+    });
+}
+
 /* =========================================================
    MARKDOWN PAGE MAP
    ========================================================= */
@@ -24,6 +33,11 @@ const markdownPages = {
     16: 'content/challenges/master.md',
     17: 'content/challenges/grandmaster.md'
 };
+
+/* Tracks in-flight fetch/parse promises per page index so that
+   updatePage() and preloadAllMarkdownPages() can't both trigger
+   a duplicate fetch for the same page. */
+const pageLoadPromises = {};
 
 /* =========================================================
    LOCAL STORAGE KEYS
@@ -118,6 +132,15 @@ async function loadMarkdownPage(pageIndex) {
     const path = markdownPages[pageIndex];
     if (!path) return;
 
+    // If a fetch for this page is already in flight (e.g. triggered by
+    // both updatePage() and preloadAllMarkdownPages()), await the
+    // existing promise instead of starting a second fetch.
+    if (pageLoadPromises[pageIndex]) {
+        await pageLoadPromises[pageIndex];
+        initializeDynamicContent(page, pageIndex);
+        return;
+    }
+
     page.innerHTML = `
         <div class="loading-message">
             <div class="loading-spinner"></div>
@@ -125,31 +148,42 @@ async function loadMarkdownPage(pageIndex) {
         </div>
     `;
 
-    try {
-        const response = await fetch(path);
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status} — ${response.statusText}`);
-        }
+    pageLoadPromises[pageIndex] = (async () => {
+        try {
+            const response = await fetch(path);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} — ${response.statusText}`);
+            }
 
-        const markdown = await response.text();
-        page.innerHTML = marked.parse(markdown);
-        page.dataset.loaded = 'true';
+            const markdown = await response.text();
+            page.innerHTML = marked.parse(markdown);
 
-        initializeDynamicContent(page, pageIndex);
-    } catch (error) {
-        console.error(`Unable to load ${path}`, error);
-        page.innerHTML = `
-            <div class="page-main-content">
-                <h2>Unable to Load Content</h2>
-                <div class="callout error-callout">
-                    <p>The Markdown content could not be loaded.</p>
-                    <p><strong>File:</strong> ${escapeHtml(path)}</p>
-                    <p>If you are testing locally, make sure you are running the project through a local web server rather than opening the HTML file directly with <code>file://</code>.</p>
-                    <p><strong>Technical error:</strong> ${escapeHtml(error.message)}</p>
+            // marked renders GFM task-list checkboxes as disabled by
+            // default. Strip that so the log's checkboxes are actually
+            // clickable, which the whole persistence system depends on.
+            page.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.removeAttribute('disabled');
+            });
+
+            page.dataset.loaded = 'true';
+        } catch (error) {
+            console.error(`Unable to load ${path}`, error);
+            page.innerHTML = `
+                <div class="page-main-content">
+                    <h2>Unable to Load Content</h2>
+                    <div class="callout error-callout">
+                        <p>The Markdown content could not be loaded.</p>
+                        <p><strong>File:</strong> ${escapeHtml(path)}</p>
+                        <p>If you are testing locally, make sure you are running the project through a local web server rather than opening the HTML file directly with <code>file://</code>.</p>
+                        <p><strong>Technical error:</strong> ${escapeHtml(error.message)}</p>
+                    </div>
                 </div>
-            </div>
-        `;
-    }
+            `;
+        }
+    })();
+
+    await pageLoadPromises[pageIndex];
+    initializeDynamicContent(page, pageIndex);
 }
 
 /* Pre-load all markdown pages in the background for instant dashboard stats */
@@ -228,10 +262,22 @@ document.addEventListener('change', function(event) {
    COMPLETION DATE METADATA
    ========================================================= */
 
+/* Card markup (.milestone-card / .challenge-card) puts the checkbox
+   as one grid column and a content wrapper as the next. If the
+   wrapper exists, the completion date belongs inside it (next to the
+   text) rather than as a sibling of the checkbox, which would land in
+   the wrong grid cell. Plain <li> markup has no such wrapper, so it
+   falls back to the checkbox's parent element. */
+function getMetadataContainer(checkbox) {
+    return checkbox.nextElementSibling || checkbox.parentElement;
+}
+
 function addCompletionMetadata(checkbox) {
     if (!checkbox.id) return;
 
-    if (checkbox.parentElement.querySelector(`.completion-date[data-for="${checkbox.id}"]`)) {
+    const container = getMetadataContainer(checkbox);
+
+    if (container.querySelector(`.completion-date[data-for="${checkbox.id}"]`)) {
         updateCompletionMetadata(checkbox);
         return;
     }
@@ -239,7 +285,7 @@ function addCompletionMetadata(checkbox) {
     const metadata = document.createElement('span');
     metadata.className = 'completion-date';
     metadata.dataset.for = checkbox.id;
-    checkbox.parentElement.appendChild(metadata);
+    container.appendChild(metadata);
 
     updateCompletionMetadata(checkbox);
 }
@@ -247,7 +293,8 @@ function addCompletionMetadata(checkbox) {
 function updateCompletionMetadata(checkbox) {
     if (!checkbox.id) return;
 
-    const metadata = checkbox.parentElement.querySelector(`.completion-date[data-for="${checkbox.id}"]`);
+    const container = getMetadataContainer(checkbox);
+    const metadata = container.querySelector(`.completion-date[data-for="${checkbox.id}"]`);
     if (!metadata) return;
 
     if (!checkbox.checked) {
