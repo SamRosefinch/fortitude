@@ -2,29 +2,32 @@
 
 Exceptional feats of strength, stability, and supreme mind-muscle connection.
 
-## The Ultimate Circuit Test
+<div class="challenge-card">
+  <input type="checkbox">
+  <div>
+    <span class="challenge-badge badge-master">Master</span>
+    <div class="progression-title">The Ultimate Circuit Test</div>
+    <p>Complete 4 full rounds of the Tier 3 matrix exercises with zero rest between movements.</p>
+  </div>
+</div>
 
-**Difficulty:** Master
+<div class="challenge-card">
+  <input type="checkbox">
+  <div>
+    <span class="challenge-badge badge-master">Master</span>
+    <div class="progression-title">Iron Core Titan</div>
+    <p>Hold a Long-Lever Plank continuously for 75 seconds without form failure.</p>
+  </div>
+</div>
 
-Complete 4 full rounds of the Tier 3 matrix exercises with zero rest between movements.
-
-- [ ] Completed
-
-## Iron Core Titan
-
-**Difficulty:** Master
-
-Hold a Long-Lever Plank continuously for 75 seconds without form failure.
-
-- [ ] Completed
-
-## Continuous Tension Endurance
-
-**Difficulty:** Master
-
-Perform 50 push-ups and 50 bodyweight squats in an alternating 5-rep ladder without stopping.
-
-- [ ] Completed
+<div class="challenge-card">
+  <input type="checkbox">
+  <div>
+    <span class="challenge-badge badge-master">Master</span>
+    <div class="progression-title">Continuous Tension Endurance</div>
+    <p>Perform 50 push-ups and 50 bodyweight squats in an alternating 5-rep ladder without stopping.</p>
+  </div>
+</div>
 
 ## Challenge Protocol
 
