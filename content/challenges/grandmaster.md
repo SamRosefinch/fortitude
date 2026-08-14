@@ -2,30 +2,79 @@
 
 The absolute pinnacle of calisthenics endurance and physical mastery.
 
-## The Grandmaster Trial
+<div class="challenge-card">
 
-**Difficulty:** Grandmaster
+<input
+    type="checkbox"
+    id="challenge-grandmaster-1"
+>
 
+<div>
+
+<span class="challenge-badge badge-grandmaster">
+Grandmaster
+</span>
+
+<div class="progression-title">
+The Grandmaster Trial
+</div>
+
+<p>
 Accumulate 200 Push-Ups, 200 Squats, and 5 minutes of Active Dead Hang total across a single calendar day.
+</p>
 
-- [ ] Completed
+</div>
 
-## The Endless Zenith
+</div>
 
-**Difficulty:** Grandmaster
 
+<div class="challenge-card">
+
+<input
+    type="checkbox"
+    id="challenge-grandmaster-2"
+>
+
+<div>
+
+<span class="challenge-badge badge-grandmaster">
+Grandmaster
+</span>
+
+<div class="progression-title">
+The Endless Zenith
+</div>
+
+<p>
 Execute 5 consecutive clean workouts across 5 consecutive days maintaining flawless 2-second eccentric tempos.
+</p>
 
-- [ ] Completed
+</div>
 
-## Absolute Perfection
+</div>
 
-**Difficulty:** Grandmaster
 
+<div class="challenge-card">
+
+<input
+    type="checkbox"
+    id="challenge-grandmaster-3"
+>
+
+<div>
+
+<span class="challenge-badge badge-grandmaster">
+Grandmaster
+</span>
+
+<div class="progression-title">
+Absolute Perfection
+</div>
+
+<p>
 Check off every single milestone and challenge listed across all preceding pages of this collection log.
+</p>
 
-- [ ] Completed
+</div>
 
-## Challenge Protocol
-
-Grandmaster trials represent total mastery over body weight, physical endurance, and unwavering mental discipline.
+</div>
