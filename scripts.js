@@ -1,40 +1,104 @@
+/* =========================================================
+   CALISTHENICS COLLECTION LOG
+   ========================================================= */
+
 let currentPage = 0;
 
 const totalPages = 18;
 
-const STORAGE_PREFIX = 'calisthenics_';
+const STORAGE_PREFIX = 'calisthenics-progress-';
+
+const PAGE_STORAGE_KEY =
+    'calisthenics-current-page';
 
 
-/*
-|--------------------------------------------------------------------------
-| PAGE NAVIGATION
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   MARKDOWN PAGE MAP
+   ========================================================= */
 
-function updatePage() {
+const markdownPages = {
 
-    const pages = document.querySelectorAll('.print-page');
-    const navLinks = document.querySelectorAll('.nav-link');
+    7: 'content/milestones/part-1.md',
+
+    8: 'content/milestones/part-2.md',
+
+    9: 'content/milestones/part-3.md',
+
+    10: 'content/milestones/part-4.md',
+
+    11: 'content/milestones/part-5.md',
+
+    12: 'content/challenges/easy.md',
+
+    13: 'content/challenges/medium.md',
+
+    14: 'content/challenges/hard.md',
+
+    15: 'content/challenges/elite.md',
+
+    16: 'content/challenges/master.md',
+
+    17: 'content/challenges/grandmaster.md'
+
+};
+
+
+/* =========================================================
+   LOCAL STORAGE KEYS
+   ========================================================= */
+
+function getProgressKey(id) {
+
+    return STORAGE_PREFIX + id;
+
+}
+
+
+function getDateKey(id) {
+
+    return STORAGE_PREFIX + id + '-date';
+
+}
+
+
+/* =========================================================
+   PAGE NAVIGATION
+   ========================================================= */
+
+async function updatePage() {
+
+    const pages =
+        document.querySelectorAll('.print-page');
+
+    const navLinks =
+        document.querySelectorAll('.nav-link');
+
 
     pages.forEach((page, index) => {
 
         if (index === currentPage) {
+
             page.classList.add('active');
+
         } else {
+
             page.classList.remove('active');
+
         }
 
     });
 
 
-    navLinks.forEach(link => {
+    navLinks.forEach((link, index) => {
 
-        const pageIndex = Number(link.dataset.page);
+        if (index === currentPage) {
 
-        if (pageIndex === currentPage) {
             link.classList.add('active');
+
         } else {
+
             link.classList.remove('active');
+
         }
 
     });
@@ -47,17 +111,33 @@ function updatePage() {
     document.getElementById('prevBtn').disabled =
         currentPage === 0;
 
+
     document.getElementById('nextBtn').disabled =
         currentPage === totalPages - 1;
+
+
+    localStorage.setItem(
+        PAGE_STORAGE_KEY,
+        currentPage
+    );
+
+
+    /*
+     * Load Markdown only when that page is visited.
+     */
+
+    if (markdownPages[currentPage]) {
+
+        await loadMarkdownPage(currentPage);
+
+    }
 
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| NAVIGATION FUNCTIONS
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   NEXT / PREVIOUS
+   ========================================================= */
 
 function nextPage() {
 
@@ -87,8 +167,13 @@ function prevPage() {
 
 function goToPage(index) {
 
-    if (index < 0 || index >= totalPages) {
+    if (
+        index < 0 ||
+        index >= totalPages
+    ) {
+
         return;
+
     }
 
     currentPage = index;
@@ -98,347 +183,618 @@ function goToPage(index) {
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| MARKDOWN LOADING
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   MARKDOWN LOADING
+   ========================================================= */
 
-async function loadMarkdownPages() {
+async function loadMarkdownPage(pageIndex) {
 
-    const pages = document.querySelectorAll('.markdown-page');
+    const page =
+        document.querySelector(
+            `.print-page[data-index="${pageIndex}"]`
+        );
 
-    for (const page of pages) {
 
-        const path = page.dataset.markdown;
+    if (!page) {
 
-        if (!path) {
-            continue;
+        return;
+
+    }
+
+
+    /*
+     * Don't download the same Markdown file repeatedly.
+     */
+
+    if (page.dataset.loaded === 'true') {
+
+        initializeDynamicContent(page);
+
+        return;
+
+    }
+
+
+    const path = markdownPages[pageIndex];
+
+
+    if (!path) {
+
+        return;
+
+    }
+
+
+    /*
+     * Loading state.
+     */
+
+    page.innerHTML = `
+        <div class="loading-message">
+            <div class="loading-spinner"></div>
+            <p>Loading collection data...</p>
+        </div>
+    `;
+
+
+    try {
+
+        const response = await fetch(path);
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status} — ${response.statusText}`
+            );
+
         }
 
-        try {
 
-            const response = await fetch(path);
+        const markdown =
+            await response.text();
 
-            if (!response.ok) {
-                throw new Error(
-                    `HTTP ${response.status}: ${response.statusText}`
-                );
-            }
 
-            const markdown = await response.text();
+        /*
+         * Marked converts Markdown into HTML.
+         */
 
-            page.innerHTML = `
-                <div class="page-main-content markdown-content">
-                    ${marked.parse(markdown)}
+        page.innerHTML =
+            marked.parse(markdown);
+
+
+        page.dataset.loaded = 'true';
+
+
+        /*
+         * Restore saved checkbox state.
+         */
+
+        initializeDynamicContent(page);
+
+
+    } catch (error) {
+
+        console.error(
+            `Unable to load ${path}`,
+            error
+        );
+
+
+        page.innerHTML = `
+
+            <div class="page-main-content">
+
+                <h2>
+                    Unable to Load Content
+                </h2>
+
+                <div class="callout error-callout">
+
+                    <p>
+                        The Markdown content could not be loaded.
+                    </p>
+
+                    <p>
+                        <strong>File:</strong>
+                        ${escapeHtml(path)}
+                    </p>
+
+                    <p>
+                        If you are testing locally, make sure
+                        you are running the project through a
+                        local web server rather than opening
+                        the HTML file directly with
+                        <code>file://</code>.
+                    </p>
+
+                    <p>
+                        <strong>Technical error:</strong>
+                        ${escapeHtml(error.message)}
+                    </p>
+
                 </div>
-            `;
 
-            convertMarkdownCheckboxes(page);
+            </div>
 
-        } catch (error) {
-
-            console.error(`Unable to load ${path}`, error);
-
-            page.innerHTML = `
-                <div class="page-main-content">
-                    <h2>Unable to Load Content</h2>
-
-                    <div class="callout">
-                        <p>
-                            The content file could not be loaded.
-                        </p>
-
-                        <p>
-                            <strong>File:</strong> ${path}
-                        </p>
-
-                        <p>
-                            Make sure the Markdown file exists in the
-                            repository and that GitHub Pages is serving
-                            the project from the correct directory.
-                        </p>
-                    </div>
-                </div>
-            `;
-
-        }
+        `;
 
     }
 
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| CONVERT MARKDOWN CHECKBOXES
-|--------------------------------------------------------------------------
-|
-| Markdown checkboxes generated by marked.js are converted into the
-| same visual structure used by the original application.
-|
-*/
+/* =========================================================
+   CHECKBOX INITIALIZATION
+   ========================================================= */
 
-function convertMarkdownCheckboxes(page) {
-
-    const checkboxItems = page.querySelectorAll(
-        'input[type="checkbox"]'
-    );
-
-    checkboxItems.forEach((checkbox, index) => {
-
-        /*
-         * Give every checkbox a permanent ID.
-         *
-         * If the Markdown file has:
-         *
-         * - [ ] Some milestone
-         *
-         * marked.js creates the checkbox but doesn't necessarily
-         * provide the ID we need for localStorage.
-         */
-
-        const listItem = checkbox.closest('li');
-
-        let identifier = '';
-
-        if (listItem) {
-
-            const labelText = listItem.textContent
-                .replace(/\s+/g, ' ')
-                .trim()
-                .toLowerCase();
-
-            identifier = labelText
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-|-$/g, '');
-
-        }
-
-        const fileName = page.dataset.markdown
-            .split('/')
-            .pop()
-            .replace('.md', '');
-
-        checkbox.id =
-            `${STORAGE_PREFIX}${fileName}-${identifier || index}`;
-
-        checkbox.classList.add('markdown-checkbox');
-
-        checkbox.addEventListener(
-            'change',
-            saveProgress
-        );
-
-        /*
-         * Turn the parent list item into the visual checklist
-         * component.
-         */
-
-        if (listItem) {
-
-            listItem.classList.add('checklist-item');
-
-            /*
-             * Remove the browser-generated task-list styling
-             * while retaining the actual checkbox.
-             */
-
-            listItem.style.listStyle = 'none';
-
-        }
-
-    });
-
-
-    loadProgress();
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| PROGRESS STORAGE
-|--------------------------------------------------------------------------
-*/
-
-function getAllProgressCheckboxes() {
-
-    return document.querySelectorAll(
-        'input[type="checkbox"]'
-    );
-
-}
-
-
-function saveProgress() {
+function initializeDynamicContent(container) {
 
     const checkboxes =
-        getAllProgressCheckboxes();
+        container.querySelectorAll(
+            'input[type="checkbox"]'
+        );
 
 
     checkboxes.forEach(checkbox => {
 
-        if (!checkbox.id) {
-            return;
-        }
+        loadCheckbox(checkbox);
+
+        addCompletionMetadata(checkbox);
+
+    });
+
+}
+
+
+/* =========================================================
+   CHECKBOX PERSISTENCE
+   ========================================================= */
+
+function saveCheckbox(checkbox) {
+
+    if (
+        !checkbox ||
+        !checkbox.id
+    ) {
+
+        return;
+
+    }
+
+
+    const progressKey =
+        getProgressKey(checkbox.id);
+
+    const dateKey =
+        getDateKey(checkbox.id);
+
+
+    if (checkbox.checked) {
 
         localStorage.setItem(
-            checkbox.id,
-            checkbox.checked
+            progressKey,
+            'true'
         );
 
-    });
-
-}
-
-
-function loadProgress() {
-
-    const checkboxes =
-        getAllProgressCheckboxes();
-
-
-    checkboxes.forEach(checkbox => {
-
-        if (!checkbox.id) {
-            return;
-        }
-
-        const savedState =
-            localStorage.getItem(checkbox.id);
-
-
-        if (savedState !== null) {
-
-            checkbox.checked =
-                savedState === 'true';
-
-        }
-
-    });
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| SIDEBAR EVENTS
-|--------------------------------------------------------------------------
-*/
-
-function initializeNavigation() {
-
-    const navLinks =
-        document.querySelectorAll('.nav-link');
-
-
-    navLinks.forEach(link => {
-
-        link.addEventListener('click', () => {
-
-            const page =
-                Number(link.dataset.page);
-
-            goToPage(page);
-
-        });
-
-    });
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| SLIDER BUTTON EVENTS
-|--------------------------------------------------------------------------
-*/
-
-function initializeControls() {
-
-    document
-        .getElementById('prevBtn')
-        .addEventListener('click', prevPage);
-
-
-    document
-        .getElementById('nextBtn')
-        .addEventListener('click', nextPage);
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| KEYBOARD NAVIGATION
-|--------------------------------------------------------------------------
-*/
-
-function initializeKeyboardNavigation() {
-
-    document.addEventListener('keydown', event => {
 
         /*
-         * Don't hijack keyboard navigation when the user is
-         * interacting with a checkbox or another form element.
+         * Only create the completion date if one
+         * doesn't already exist.
          */
 
         if (
-            event.target.tagName === 'INPUT' ||
-            event.target.tagName === 'TEXTAREA' ||
-            event.target.tagName === 'SELECT'
+            !localStorage.getItem(dateKey)
         ) {
-            return;
+
+            localStorage.setItem(
+                dateKey,
+                new Date().toISOString()
+            );
+
         }
 
+    } else {
 
-        if (event.key === 'ArrowRight') {
-            nextPage();
+        localStorage.setItem(
+            progressKey,
+            'false'
+        );
+
+        localStorage.removeItem(dateKey);
+
+    }
+
+
+    updateCompletionMetadata(checkbox);
+
+}
+
+
+/* =========================================================
+   LOAD CHECKBOX
+   ========================================================= */
+
+function loadCheckbox(checkbox) {
+
+    if (
+        !checkbox ||
+        !checkbox.id
+    ) {
+
+        return;
+
+    }
+
+
+    const savedState =
+        localStorage.getItem(
+            getProgressKey(checkbox.id)
+        );
+
+
+    if (savedState !== null) {
+
+        checkbox.checked =
+            savedState === 'true';
+
+    }
+
+}
+
+
+/* =========================================================
+   EVENT DELEGATION
+   ========================================================= */
+
+/*
+ * This is important because the checkboxes don't exist
+ * when doc1.html initially loads.
+ *
+ * They are created later when Markdown is converted
+ * into HTML.
+ */
+
+document.addEventListener(
+    'change',
+    function(event) {
+
+        if (
+            event.target.matches(
+                'input[type="checkbox"]'
+            )
+        ) {
+
+            saveCheckbox(event.target);
+
         }
 
+    }
+);
 
-        if (event.key === 'ArrowLeft') {
-            prevPage();
+
+/* =========================================================
+   COMPLETION DATE
+   ========================================================= */
+
+function addCompletionMetadata(checkbox) {
+
+    if (!checkbox.id) {
+
+        return;
+
+    }
+
+
+    /*
+     * Don't create duplicate metadata.
+     */
+
+    if (
+        checkbox.parentElement.querySelector(
+            `.completion-date[data-for="${checkbox.id}"]`
+        )
+    ) {
+
+        updateCompletionMetadata(checkbox);
+
+        return;
+
+    }
+
+
+    const metadata =
+        document.createElement('span');
+
+
+    metadata.className =
+        'completion-date';
+
+
+    metadata.dataset.for =
+        checkbox.id;
+
+
+    checkbox.parentElement.appendChild(
+        metadata
+    );
+
+
+    updateCompletionMetadata(checkbox);
+
+}
+
+
+function updateCompletionMetadata(checkbox) {
+
+    if (!checkbox.id) {
+
+        return;
+
+    }
+
+
+    const metadata =
+        checkbox.parentElement.querySelector(
+            `.completion-date[data-for="${checkbox.id}"]`
+        );
+
+
+    if (!metadata) {
+
+        return;
+
+    }
+
+
+    if (!checkbox.checked) {
+
+        metadata.textContent = '';
+
+        metadata.classList.remove(
+            'completed'
+        );
+
+        return;
+
+    }
+
+
+    const savedDate =
+        localStorage.getItem(
+            getDateKey(checkbox.id)
+        );
+
+
+    if (!savedDate) {
+
+        metadata.textContent = '';
+
+        return;
+
+    }
+
+
+    const date =
+        new Date(savedDate);
+
+
+    if (Number.isNaN(date.getTime())) {
+
+        metadata.textContent = '';
+
+        return;
+
+    }
+
+
+    metadata.textContent =
+        `Completed ${formatDate(date)}`;
+
+
+    metadata.classList.add(
+        'completed'
+    );
+
+}
+
+
+/* =========================================================
+   DATE FORMATTING
+   ========================================================= */
+
+function formatDate(date) {
+
+    return new Intl.DateTimeFormat(
+        undefined,
+        {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        }
+    ).format(date);
+
+}
+
+
+/* =========================================================
+   CLEAR ALL PROGRESS
+   ========================================================= */
+
+function clearAllProgress() {
+
+    const confirmed =
+        window.confirm(
+            'Are you sure you want to clear all milestone and challenge progress? This cannot be undone.'
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    /*
+     * Remove all progress keys.
+     */
+
+    Object.keys(localStorage).forEach(key => {
+
+        if (
+            key.startsWith(
+                STORAGE_PREFIX
+            )
+        ) {
+
+            localStorage.removeItem(key);
+
         }
 
     });
 
-}
+
+    /*
+     * Reset every checkbox currently loaded.
+     */
+
+    const checkboxes =
+        document.querySelectorAll(
+            'input[type="checkbox"]'
+        );
 
 
-/*
-|--------------------------------------------------------------------------
-| INITIALIZATION
-|--------------------------------------------------------------------------
-*/
+    checkboxes.forEach(checkbox => {
 
-async function initializeApp() {
+        checkbox.checked = false;
 
-    initializeNavigation();
+        updateCompletionMetadata(
+            checkbox
+        );
 
-    initializeControls();
+    });
 
-    initializeKeyboardNavigation();
+
+    /*
+     * Return to the beginning.
+     */
+
+    currentPage = 0;
 
     updatePage();
 
-    /*
-     * Load the external Markdown files.
-     */
+}
 
-    await loadMarkdownPages();
 
-    /*
-     * Load any existing saved checkbox states.
-     */
+/* =========================================================
+   RESTORE LAST PAGE
+   ========================================================= */
 
-    loadProgress();
+function loadSavedPage() {
+
+    const savedPage =
+        localStorage.getItem(
+            PAGE_STORAGE_KEY
+        );
+
+
+    if (savedPage === null) {
+
+        return;
+
+    }
+
+
+    const parsedPage =
+        parseInt(savedPage, 10);
+
+
+    if (
+        !Number.isNaN(parsedPage) &&
+        parsedPage >= 0 &&
+        parsedPage < totalPages
+    ) {
+
+        currentPage = parsedPage;
+
+    }
 
 }
 
 
+/* =========================================================
+   HTML ESCAPING
+   ========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+}
+
+
+/* =========================================================
+   KEYBOARD NAVIGATION
+   ========================================================= */
+
 document.addEventListener(
+    'keydown',
+    function(event) {
+
+        /*
+         * Don't hijack arrow keys while interacting
+         * with form controls.
+         */
+
+        if (
+            event.target.matches(
+                'input, textarea, select, button'
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            event.key === 'ArrowRight'
+        ) {
+
+            nextPage();
+
+        }
+
+
+        if (
+            event.key === 'ArrowLeft'
+        ) {
+
+            prevPage();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   APPLICATION STARTUP
+   ========================================================= */
+
+window.addEventListener(
     'DOMContentLoaded',
-    initializeApp
+    function() {
+
+        loadSavedPage();
+
+        updatePage();
+
+    }
 );
